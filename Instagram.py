@@ -1,9 +1,15 @@
 import aiohttp
 import asyncio
 import argparse
+import sys
 
 from bs4 import BeautifulSoup
 from re import findall
+
+#To avoid the event close in windows 
+if sys.version_info[0] == 3 and sys.version_info[1] >=8 and sys.platform.startswith('win'):
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 
 url = 'https://www.instagram.com/'
 headers = {
@@ -27,6 +33,5 @@ async def get_stats():
             Post = findall('Following,.(.*)', str(data1))[0]
 
             print('[+] ' + f'{Followers}\n' + '[+]' + f'{Following}\n' + '[+] ' + f'{Post}\n')
-
 
 asyncio.run(get_stats())
